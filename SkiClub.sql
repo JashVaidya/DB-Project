@@ -91,12 +91,14 @@ DECLARE
 	aMemGender = SkiClub.gender%TYPE;
 	aRoomGender = Condo_Reservation.Gender%TYPE;
 BEGIN
+	aMemGender = select Gender from SkiClub Where MID = :new.MID;
+	aRoomGender = select Gender from Condo_Reservation Where RID = :new.RID;
 	if(aMemGender != aRoomGender)
 	{
-		INSERT INTO reserveError ()
+		INSERT INTO reserveError (Error_seq.nextVal, :new.MID, :new.RID, CURRENT_DATE, '-20098', 'Incompatible genders.')
 		VALUES ();
 	}
-END log_loanFee_update;
+END gender_Match_Trigger;
 /
 
 CREATE OR REPLACE PROCEDURE addTrip 
