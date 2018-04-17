@@ -65,7 +65,39 @@ CREATE TABLE Payment
 ,   CONSTRAINT  Ski_Mem_Pay_FK Foreign key (MID) references SkiClub
 );
 
+CREATE TABLE reserveError
+(
+	errorNumber number,
+	MID NUMBER,
+	RID NUMBER,
+	errorDate date,
+	errorCode varchar2(30),
+	errorMessage varchar2(200),
+	
+);
 
+DROP SEQUENCE Error_seq;
+
+CREATE SEQUENCE Error_seq
+MINVALUE 1
+START WITH 1
+INCREMENT BY 1
+CACHE 10;
+
+CREATE OR REPLACE TRIGGER gender_Match_Trigger
+	AFTER INSERT ON Condo_Assign
+	FOR EACH ROW
+DECLARE
+	aMemGender = SkiClub.gender%TYPE;
+	aRoomGender = Condo_Reservation.Gender%TYPE;
+BEGIN
+	if(aMemGender != aRoomGender)
+	{
+		INSERT INTO reserveError ()
+		VALUES ();
+	}
+END log_loanFee_update;
+/
 
 CREATE OR REPLACE PROCEDURE addTrip 
 (aTID in Trip.TID%TYPE,
