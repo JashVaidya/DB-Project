@@ -72,8 +72,7 @@ CREATE TABLE reserveError
 	RID NUMBER,
 	errorDate date,
 	errorCode varchar2(30),
-	errorMessage varchar2(200),
-	
+	errorMessage varchar2(200)	
 );
 
 DROP SEQUENCE Error_seq;
@@ -99,6 +98,34 @@ BEGIN
 		VALUES ();
 	}
 END gender_Match_Trigger;
+/
+
+CREATE OR REPLACE TRIGGER check_Payment
+	AFTER INSERT ON Condo_Assign
+	FOR EACH ROW
+DECLARE
+	aMemPayment = Payment.Payment%TYPE; 
+BEGIN
+	aMemPayment := (SELECT SUM(Payment) FROM Payment WHERE MID = :new.MID);
+	if (aMemPayment >= 150) then
+	{
+		INSERT INTO reserveError VALUES(Error_seq.nextVal, :new.MID, :new.RID, CURRENT_DATE, '21000', 'Member exceeds the $150 limit');
+	}
+	end if;
+END check_Payment;
+/
+
+CREATE OR REPLACE TRIGGER check_Beds
+	AFTER INSERT ON Condo_Assign
+	FOR Each ROW
+DECLARE
+	number aBedAmt; 
+BEGIN
+	aBedAmt := (SELECT COUNT(RID) FROM Condo_Assign WHERE RID = :old.RID); 
+	if aBedAmt > 4 then
+		INSERT INTO reserveError VALUES (Error_seq.nextVal, :new.MID, :new.RID, CURRENT_DATE, '21000', 'Member exceeds the $150 limit');
+	end if;
+END check_Beds;
 /
 
 CREATE OR REPLACE PROCEDURE addTrip 
