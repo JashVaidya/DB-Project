@@ -84,19 +84,18 @@ INCREMENT BY 1
 CACHE 10;
 
 CREATE OR REPLACE TRIGGER gender_Match_Trigger
-	AFTER INSERT ON Condo_Assign
+	BEFORE INSERT ON Condo_Assign
 	FOR EACH ROW
 DECLARE
-	aMemGender = SkiClub.gender%TYPE;
-	aRoomGender = Condo_Reservation.Gender%TYPE;
+	aMemGender Char(1);
+	aRoomGender Char(1);
 BEGIN
-	aMemGender = select Gender from SkiClub Where MID = :new.MID;
-	aRoomGender = select Gender from Condo_Reservation Where RID = :new.RID;
-	if(aMemGender != aRoomGender)
-	{
-		INSERT INTO reserveError (Error_seq.nextVal, :new.MID, :new.RID, CURRENT_DATE, '-20098', 'Incompatible genders.')
-		VALUES ();
-	}
+	select Gender into aMemGender from SkiClub Where MID = :new.MID;
+	select Gender into aRoomGender from Condo_Reservation Where RID = :new.RID;
+	IF (aMemGender != aRoomGender) then
+		INSERT INTO reserveError (errorNumber, MID, RID, errorDate, errorCode, errorMessage)
+		VALUES (Error_seq.nextVal, :new.MID, :new.RID, SYSDATE, '-20098', 'Incompatible genders.');
+	END IF;
 END gender_Match_Trigger;
 /
 
