@@ -396,6 +396,3 @@ select * from Payment;
 
 show errors;
 show exceptions;
-
-
--- I like llamas
