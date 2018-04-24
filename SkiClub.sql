@@ -4,6 +4,7 @@
 SET ECHO ON;
 set serveroutput on;
 
+DROP TABLE reserveError; 
 DROP table Payment;
 DROP TABLE Condo_Assign;
 DROP TABLE Condo_Reservation;
@@ -83,21 +84,21 @@ START WITH 1
 INCREMENT BY 1
 CACHE 10;
 
-CREATE OR REPLACE TRIGGER gender_Match_Trigger
-	BEFORE INSERT ON Condo_Assign
-	FOR EACH ROW
-DECLARE
-	aMemGender Char(1);
-	aRoomGender Char(1);
-BEGIN
-	select Gender into aMemGender from SkiClub Where MID = :new.MID;
-	select Gender into aRoomGender from Condo_Reservation Where RID = :new.RID;
-	IF (aMemGender != aRoomGender) then
-		INSERT INTO reserveError (errorNumber, MID, RID, errorDate, errorCode, errorMessage)
-		VALUES (Error_seq.nextVal, :new.MID, :new.RID, SYSDATE, '-20098', 'Incompatible genders.');
-	END IF;
-END gender_Match_Trigger;
-/
+-- CREATE OR REPLACE TRIGGER gender_Match_Trigger
+-- 	BEFORE INSERT ON Condo_Assign
+-- 	FOR EACH ROW
+-- DECLARE
+-- 	aMemGender Char(1);
+-- 	aRoomGender Char(1);
+-- BEGIN
+-- 	select Gender into aMemGender from SkiClub Where MID = :new.MID;
+-- 	select Gender into aRoomGender from Condo_Reservation Where RID = :new.RID;
+-- 	IF (aMemGender != aRoomGender) then
+-- 		INSERT INTO reserveError (errorNumber, MID, RID, errorDate, errorCode, errorMessage)
+-- 		VALUES (Error_seq.nextVal, :new.MID, :new.RID, SYSDATE, '-20098', 'Incompatible genders.');
+-- 	END IF;
+-- END gender_Match_Trigger;
+-- /
 
 -- CREATE OR REPLACE TRIGGER check_Payment
 -- 	AFTER INSERT ON Condo_Assign
@@ -391,7 +392,6 @@ select * from SkiClub;
 select * from Condo_Reservation;
 select * from Condo_Assign;
 select * from Payment;
-
 
 
 show errors;
