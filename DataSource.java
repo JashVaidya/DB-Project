@@ -1,6 +1,6 @@
 import java.sql.*; 
 
-class DataSource 
+public class DataSource 
 {
 	public  String TID, resort, DBstatus;
 	private Connection conn;
