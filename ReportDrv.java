@@ -17,14 +17,14 @@ public class ReportDrv
 		Connection conn;
 		Statement stmt;
 		int connected;
-		String user = "jvaidya";
+		String user = "jvaidya@itec2";
 		String pass = "radfordpass123";
 		String query; 
 		try
 		{
 			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
 			conn = DriverManager.getConnection("jdbc:oracle:thin:@Picard2:1521:itec2", user, pass);
-			/*stmt = conn.createStatement();
+			stmt = conn.createStatement();
 			
 			conn.setAutoCommit(false);
 			query = "Select * "
@@ -38,7 +38,8 @@ public class ReportDrv
 				TID = rset.getString("TID");
 				resort = rset.getString("Resort");
 				DBstatus = "Found";
-			}*/
+				System.out.println(TID + " " + resort);
+			}
 			conn.close();
 		}
 		catch(SQLException e)

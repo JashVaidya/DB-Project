@@ -6,7 +6,7 @@ public class DataSource
 	private Connection conn;
 	private Statement stmt;
 	private int connected;
-	private String user = "jvaidya";
+	private String user = "jvaidya@ietc2";
 	private String pass = "radfordpass123";
 	private String query; 
 	
