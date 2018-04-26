@@ -2,11 +2,11 @@ import java.sql.*;
 
 public class DataSource 
 {
-	public  String TID, resort, DBstatus;
+	public  String name, unit, bldg, resort, RID, TID, DBstatus;
 	private Connection conn;
 	private Statement stmt;
 	private int connected;
-	private String user = "jvaidya@ietc2";
+	private String user = "jvaidya";
 	private String pass = "radfordpass123";
 	private String query; 
 	
@@ -20,18 +20,31 @@ public class DataSource
 			stmt = conn.createStatement();
 			
 			conn.setAutoCommit(false);
-			query = "Select * "
-					+ "from Trip ";
-					
+			query= "SELECT cr.name, cr.Unit_NO, cr.Bldg, cr.RID,  cr.TID "+
+								"FROM Condo_Reservation cr"; 
+			/*query = "SELECT cr.name, cr.Unit_NO, cr.Bldg, cr.RID, t.Resort, cr.TID "+
+                 "FROM Condo_Reservation cr "+
+                 "INNER JOIN Trip t "+
+                 "ON t.TID = cr.TID "+  
+                 "INNER JOIN Condo_Assign ca"+
+                 "ON cr.RID = ca.RID";*/
 			System.out.println(query);
-	
+			System.out.println("  1");
 			ResultSet rset = stmt.executeQuery(query);
+			System.out.println("  2");
 			while(rset.next())
 			{
-				TID = rset.getString("TID");
+				System.out.println("  loop");
+				name = rset.getString("name");
+				unit = rset.getString("Unit_NO");
+				bldg = rset.getString("Bldg");
 				resort = rset.getString("Resort");
+				RID = rset.getString("RID");
+				TID = rset.getString("TID");
 				DBstatus = "Found";
+				System.out.println(name +" "+ unit +" "+ bldg +" "+ resort +" "+ RID+" " +TID);
 			}
+			System.out.println("  3");
 			conn.close();
 		}
 		catch(SQLException e)
