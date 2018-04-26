@@ -14,11 +14,11 @@ public class Reports
 	 * name of the condo BUT not the unit or the building number), and the total they have each paid for the trip.
 	 */
 
-	public void condoDetail(Connection conn) {
+	public void tripDetail(Connection conn) {
+		String DBstatus;
 		try {
-			String DBstatus = ""; 
-			String query1 = "SELECT cr.name, cr.Unit_NO, cr.Bldg, cr.RID FROM Condo_Reservation cr"; 
-					
+			
+			String query1 = "";
 			System.out.println(query1);
 			
 			Statement stmt1 = conn.createStatement (); 
@@ -42,16 +42,31 @@ public class Reports
 	 *List each condominum (the name, unit number, building and room), the resort name and trip number, the
 	 *count of students in each condo, and the total amount currently paid for each reservation. 
 	 */
-	 public String condoDetailQueery()
-	 {
-		String String query = "SELECT cr.name, cr.Unit_NO, cr.Bldg, cr.RID, t.Resort, cr.TID, COUNT(ca.MID), SUM(Payment)"+
-                "FROM Condo_Reservation cr "+
-                "INNER JOIN Trip t"+
-                "ON t.tid = cr.tid "+
-                "INNER JOIN Condo_Assign ca"+
-                "ON cr.rid = ca.rid"+
-                "GROUP BY cr.name ";
-	 }
+	public void condoDetail(Connection conn) {
+		String DBstatus;
+		try {
+			
+			String query1 = "SELECT cr.name, cr.Unit_NO, cr.Bldg, cr.RID, t.Resort, COUNT(ca.MID), SUM(Payment)" + 
+							"";
+			System.out.println(query1);
+			
+			Statement stmt1 = conn.createStatement (); 
+			ResultSet rset1 = stmt1.executeQuery(query1);
+			while (rset1.next ()) { 
+				System.out.println(rset1.getString("name") + "  " + rset1.getString("Unit_No"));
+			} 
+	
+			// Release the statement and result set
+			stmt1.close();
+			rset1.close(); 
+		} 
+		catch(SQLException e)
+		{
+			DBstatus = "Error";
+			System.out.println(e);
+		}
+			
+	}
 
 	//Student Detail
 	/**

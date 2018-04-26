@@ -393,6 +393,7 @@ select * from Condo_Reservation;
 select * from Condo_Assign;
 select * from Payment;
 
+COMMIT;
 
 show errors;
 show exceptions;
