@@ -105,9 +105,7 @@ public class Reports
 		}
 		catch(Exception e)
 		{
-			System.out.println("Broken");
 			System.out.println(e.getMessage());
-			e.printStackTrace();
 		}
 		
 		return result;
