@@ -82,6 +82,37 @@ public class Reports
 	 * city/state), the condominium they are staying in, including unit number and building, the 
 	 * amount they have paid for each trip and the amount they owe for each trip.
 	 */
+	 public String studentDetailQuery(Connection conn)
+	{
+		String result = "";
+		try
+		{
+			String query = "select t.resort, t.sun_date, t.city," + " t.state, cr.name, cr.unit_no, cr.bldg,p.payment " +
+			"from condo_reservation cr " +
+			"inner join trip t on t.tid = cr.tid " +
+			"inner join payment p on p.rid = cr.rid " +
+			"where p.mid in (select mid from skiclub)";
+			System.out.println(query);
+			
+			Statement stmt = conn.createStatement();
+			System.out.println(query);
+			ResultSet rset = stmt.executeQuery(query);
+			
+			while(rset.next())
+			{			
+				result += "Resort: " + rset.getString("resort") + " Date: " + rset.getString("sun_date") + " City: " + rset.getString("city") + " State: " + rset.getString("state") + " Name: " + rset.getString("name") + " Unit#: " + rset.getString("unit_no") + " Payment: " + rset.getString("payment") + "\n";
+			}
+		}
+		catch(Exception e)
+		{
+			System.out.println("Broken");
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return result;
+		
+	}
  
 	//Financial Detail
 	/**
