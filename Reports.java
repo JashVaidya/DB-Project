@@ -42,6 +42,16 @@ public class Reports
 	 *List each condominum (the name, unit number, building and room), the resort name and trip number, the
 	 *count of students in each condo, and the total amount currently paid for each reservation. 
 	 */
+	 public String condoDetailQueery()
+	 {
+		String String query = "SELECT cr.name, cr.Unit_NO, cr.Bldg, cr.RID, t.Resort, cr.TID, COUNT(ca.MID), SUM(Payment)"+
+                "FROM Condo_Reservation cr "+
+                "INNER JOIN Trip t"+
+                "ON t.tid = cr.tid "+
+                "INNER JOIN Condo_Assign ca"+
+                "ON cr.rid = ca.rid"+
+                "GROUP BY cr.name ";
+	 }
 
 	//Student Detail
 	/**
