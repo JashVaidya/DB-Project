@@ -43,16 +43,24 @@ public class Reports
 	 *count of students in each condo, and the total amount currently paid for each reservation. 
 	 */
 	public void condoDetail(Connection conn) {
-		String DBstatus;
 		try {
-			
-			String query1 = "SELECT cr.name, cr.Unit_NO, cr.Bldg, cr.RID, t.Resort, COUNT(ca.MID), SUM(Payment)" + 
-							"";
+			DBstatus = ""; 
+			//String query1 = "SELECT cr.name, cr.Unit_NO, cr.Bldg, cr.RID FROM Condo_Reservation cr"; 
+			String query1 = "SELECT cr.name, cr.Unit_NO, cr.Bldg, cr.RID, t.Resort, cr.TID, COUNT(*), SUM(p.Payment) " +
+                "FROM Condo_Reservation cr "+
+                "INNER JOIN Trip t "+
+                "ON t.tid = cr.tid "+
+                "INNER JOIN Condo_Assign ca "+
+                "ON cr.rid = ca.rid " +
+				"INNER JOIN Payment p on ca.MID = p.mid and ca.rid = p.rid " +
+                "GROUP BY cr.name, cr.Unit_NO, cr.Bldg, cr.RID, t.Resort, cr.TID ";
+					
 			System.out.println(query1);
 			
 			Statement stmt1 = conn.createStatement (); 
 			ResultSet rset1 = stmt1.executeQuery(query1);
-			while (rset1.next ()) { 
+			while (rset1.next ()) 
+			{
 				System.out.println(rset1.getString("name") + "  " + rset1.getString("Unit_No"));
 			} 
 	
