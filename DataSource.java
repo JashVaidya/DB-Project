@@ -21,7 +21,10 @@ public class DataSource
 
 			conn.setAutoCommit(false);
 
+			r.tripDetail(conn);
 			r.condoDetail(conn);
+			r.studentDetailQuery(conn);
+			r.financialDetailQuery(conn);
 		
 			conn.close();
 		}
