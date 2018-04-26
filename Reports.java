@@ -7,13 +7,12 @@ import java.sql.*;
 
 public class Reports
 {
-	//Trip Detail
+	//Trip Detail 
 	/**
 	 * List each trip planned for the Ski Club (including the name of the resort,  the date and city/state), 
 	 * and for each trip list the names of all students attending, their condo assignments (including the 
 	 * name of the condo BUT not the unit or the building number), and the total they have each paid for the trip.
 	 */
-
 	public void tripDetail(Connection conn) {
 		String DBstatus;
 		try {
@@ -38,14 +37,16 @@ public class Reports
 		}
 			
 	}
+	//Condo. detail
 	/**
 	 *List each condominum (the name, unit number, building and room), the resort name and trip number, the
 	 *count of students in each condo, and the total amount currently paid for each reservation. 
 	 */
 	public void condoDetail(Connection conn) {
+		String DBstatus;
+		String result = "";
 		try {
 			DBstatus = ""; 
-			//String query1 = "SELECT cr.name, cr.Unit_NO, cr.Bldg, cr.RID FROM Condo_Reservation cr"; 
 			String query1 = "SELECT cr.name, cr.Unit_NO, cr.Bldg, cr.RID, t.Resort, cr.TID, COUNT(*), SUM(p.Payment) " +
                 "FROM Condo_Reservation cr "+
                 "INNER JOIN Trip t "+
@@ -61,9 +62,12 @@ public class Reports
 			ResultSet rset1 = stmt1.executeQuery(query1);
 			while (rset1.next ()) 
 			{
-				System.out.println(rset1.getString("name") + "  " + rset1.getString("Unit_No"));
+				result += rset1.getString("name") + "  " + rset1.getString("Unit_No") + "  " + rset1.getString("Bldg") +
+						"  " + rset1.getString("RID") + "  " + rset1.getString("Resort") + "  " + rset1.getString("TID") +
+						"  " + rset1.getString("COUNT(*)") + "  " + rset1.getString("SUM(p.Payment)");
+				result += "\t";
 			} 
-	
+			System.out.println(result);
 			// Release the statement and result set
 			stmt1.close();
 			rset1.close(); 
@@ -76,7 +80,7 @@ public class Reports
 			
 	}
 
-	//Student Detail
+	//Student Detail Ricky
 	/**
 	 * Build a report for students that lists each trip they are booked for (by resort name, date, and
 	 * city/state), the condominium they are staying in, including unit number and building, the 
