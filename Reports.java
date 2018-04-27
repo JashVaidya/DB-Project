@@ -9,8 +9,7 @@ public class Reports
 {
 	//Trip Detail Jash?
 	/**
-	 * List each trip planned for the Ski Club (
-	 including the name of the resort,  the date and city/state), 
+	 * List each trip planned for the Ski Club (including the name of the resort,  the date and city/state), 
 	 * and for each trip list the names of all students attending, their condo assignments (including the 
 	 * name of the condo BUT not the unit or the building number), and the total they have each paid for the trip.
 	 */
@@ -99,7 +98,7 @@ public class Reports
 		String result = "";
 		try
 		{
-			String query = "SELECT t.resort, t.sun_date, t.city," + " t.state, cr.name, cr.unit_no, cr.bldg, p.payment " +
+			String query = "SELECT t.resort, t.sun_date, t.city, t.state, cr.name, cr.unit_no, cr.bldg, p.payment " +
 			"FROM condo_reservation cr " +
 			"INNER JOIN trip t on t.TID = cr.TID " +
 			"INNER JOIN payment p on p.RID = cr.RID " +
@@ -136,33 +135,42 @@ public class Reports
 	 */
 	 public String financialDetail(Connection conn)
 	 {
-		 String result = "";
-			try
-			{
-				String query = "SELECT t.TID, t.resort, SUM(p.payment) " +
-				"FROM condo_reservation cr " +
-				"INNER JOIN trip t ON t.TID = cr.TID " +
-				"INNER JOIN payment p ON p.RID = cr.RID " +
-				"GROUP BY t.TID, t.resort";
-				
-				Statement stmt = conn.createStatement();
-				ResultSet rset = stmt.executeQuery(query);
-				
-				while(rset.next())
-				{			
-					result += "TripID: " + rset.getString("TID") + " Resort: " + rset.getString("resort") + 
-					" Payed: $" + rset.getString("SUM(p.payment)") + "\n";
-				}
-				System.out.println("-- Financial Detail Report --\n" + result);
-				// Release the statement and result set
-				stmt.close();
-				rset.close();
-			}
-			catch(Exception e)
-			{
-				System.out.println(e.getMessage());
-			}
+		String result = "";
+		int totalOwed = 0;
+		int totalPaid = 0;
+		int totalRemaining = 0;
+		int numStudents = 0;
+		try
+		{
+			String query = "SELECT t.TID, t.resort, SUM(p.payment), COUNT(MID) " +
+			"FROM condo_reservation cr " +
+			"INNER JOIN trip t ON t.TID = cr.TID " +
+			"INNER JOIN payment p ON p.RID = cr.RID " +
+			"GROUP BY t.TID, t.resort";
 			
-			return result;
+			Statement stmt = conn.createStatement();
+			ResultSet rset = stmt.executeQuery(query);
+			
+			while(rset.next())
+			{			
+				result += "TripID: " + rset.getString("TID") + " Resort: " + rset.getString("resort");
+				
+				totalPaid = Integer.parseInt(rset.getString("SUM(p.payment)"));
+				numStudents = Integer.parseInt(rset.getString("COUNT(MID)"));
+				totalOwed =  numStudents * 50;
+				totalRemaining = totalOwed - totalRemaining;
+				result += "  numStudents: " + numStudents + "  TotalPaid: $" + totalPaid +"\n"; //+ "  TotalOwed: $" + totalOwed +
+						//	"  TotalRemaining: $" + totalRemaining + "\n";
+			}
+			System.out.println("-- Financial Detail Report --\n" + result);
+			// Release the statement and result set
+			stmt.close();
+			rset.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+		return result;
 	 }
 }
