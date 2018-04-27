@@ -160,11 +160,11 @@ public class Reports
 				
 				totalPaid = Integer.parseInt(rset.getString("SUM(p.payment)"));
 				numStudents = Integer.parseInt(rset.getString("COUNT(MID)"));
-				totalOwed =  numStudents * 50;
-				totalRemaining = totalOwed - totalRemaining;
+				totalOwed =  numStudents * 100;
+				totalRemaining = totalOwed - totalPaid;
 				
-				result += "  numStudents: " + numStudents + "  TotalPaid: $" + totalPaid +"\n"; //+ "  TotalOwed: $" + totalOwed +
-						//	"  TotalRemaining: $" + totalRemaining + "\n";
+				result += "  numStudents: " + numStudents + "  TotalPaid: $" + totalPaid  + "  TotalOwed: $" + totalOwed +
+							"  TotalRemaining: $" + totalRemaining + "\n";
 			}
 			System.out.println("-- Financial Detail Report --\n" + result);
 			// Release the statement and result set
