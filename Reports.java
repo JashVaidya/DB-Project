@@ -159,6 +159,7 @@ public class Reports
 				numStudents = Integer.parseInt(rset.getString("COUNT(MID)"));
 				totalOwed =  numStudents * 50;
 				totalRemaining = totalOwed - totalRemaining;
+				
 				result += "  numStudents: " + numStudents + "  TotalPaid: $" + totalPaid +"\n"; //+ "  TotalOwed: $" + totalOwed +
 						//	"  TotalRemaining: $" + totalRemaining + "\n";
 			}
