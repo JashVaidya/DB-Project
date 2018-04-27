@@ -20,11 +20,11 @@ public class DataSource
 			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@Picard2:1521:itec2", user, pass);
 
 			conn.setAutoCommit(false);
-
+			
 			r.tripDetail(conn);
 			r.condoDetail(conn);
-			r.studentDetailQuery(conn);
-			r.financialDetailQuery(conn);
+			r.studentDetail(conn);
+			r.financialDetail(conn);
 		
 			conn.close();
 		}
