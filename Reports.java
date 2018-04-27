@@ -90,28 +90,31 @@ public class Reports
 	//Student Detail Ricky
 	/**
 	 * Build a report for students that lists each trip they are booked for (by resort name, date, and
-	 * city/state), the condominium they are staying in, including unit number and building, the 
-	 * amount they have paid for each trip and the amount they owe for each trip.
+	 * city/state), the condominium they are staying in, including unit number and building,
+	 * the amount they have paid for each trip and 
+	 * the amount they owe for each trip
 	 */
 	 public String studentDetail(Connection conn)
 	{
 		String result = "";
 		try
 		{
-			String query = "SELECT t.resort, t.sun_date, t.city, t.state, cr.name, cr.unit_no, cr.bldg, p.payment " +
+			String query = "SELECT distinct p.MID, t.resort, t.sun_date, t.city, t.state, cr.name, cr.unit_no, cr.bldg, p.payment " +
 			"FROM condo_reservation cr " +
 			"INNER JOIN trip t on t.TID = cr.TID " +
 			"INNER JOIN payment p on p.RID = cr.RID " +
-			"WHERE p.mid IN (SELECT MID from SkiClub)";
+			"WHERE p.mid IN (SELECT MID from SkiClub) "+
+			"ORDER BY p.mid";
 			
 			Statement stmt = conn.createStatement();
 			ResultSet rset = stmt.executeQuery(query);
 			
 			while(rset.next())
 			{			
-				result += "Resort: " + rset.getString("resort") + "  Date: " + rset.getString("sun_date") + "  City: " +
+				result += "Student: " + rset.getString("MID")+ " Resort: " + rset.getString("resort") + "  Date: " + rset.getString("sun_date") + "  City: " +
 				rset.getString("city") + "  State: " + rset.getString("state") + "  Name: " + rset.getString("name") +
-				"  Unit#: " + rset.getString("unit_no") + "  Payment: $" + rset.getString("payment") + "\n";
+				"  Unit#: " + rset.getString("unit_no") + "  Payment: $" + rset.getString("payment") + "  AmountOwed: $"+
+				  (100 - Integer.parseInt(rset.getString("payment")))+ "\n";
 			}
 			System.out.println("-- Student Detail Report --\n" + result);
 			// Release the statement and result set
